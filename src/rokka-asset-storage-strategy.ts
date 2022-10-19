@@ -47,7 +47,6 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
         this.rka = rokka({ apiKey: this.rokkaConfig.apiKey })
     }
 
-
     destroy?: (() => void | Promise<void>) | undefined
 
     async writeFileFromBuffer(fileName: string, data: Buffer): Promise<string> {

@@ -13,10 +13,18 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.3",
     "ts-node": "^10.7.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.33.0",
+    "eslint": "^8.25.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "2.7.1"
   },
   "scripts": {
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
