@@ -14,21 +14,25 @@ export interface RokkaConfig {
     apiKey: string
 }
 
+export const RokkaIdentifierToUrl = (identifier: string): string | null => {
+    if (identifier && identifier.startsWith('rokka:')) {
+        const [, org, hash, preview] = identifier.split(':')
+
+        if (preview === 'preview') {
+            return `https://${org}.rokka.io/dynamic/resize-width-1024-upscale-false/o-af-1/${hash}.jpg`
+        }
+        return `https://${org}.rokka.io/dynamic/o-af-1/${hash}.jpg`
+    }
+    return null
+}
+
 export function configureRokkaAssetStorage(rokkaConfig: RokkaConfig) {
     return (options: AssetServerOptions) => {
         const prefixFn = getAssetUrlPrefixFn(options)
         const toAbsoluteUrlFn = (request: Request, identifier: string): string => {
-            if (!identifier) {
-                return ''
-            }
-
-            if (identifier.startsWith('rokka:')) {
-                const [, org, hash, preview] = identifier.split(':')
-
-                if (preview === 'preview') {
-                    return `https://${org}.rokka.io/dynamic/resize-width-1024-upscale-false/o-af-1/${hash}.jpg`
-                }
-                return `https://${org}.rokka.io/dynamic/o-af-1/${hash}.jpg`
+            const url = RokkaIdentifierToUrl(identifier)
+            if (url) {
+                return url
             }
             const prefix = prefixFn(request, identifier)
             return identifier.startsWith(prefix) ? identifier : `${prefix}${identifier}`
