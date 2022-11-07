@@ -14,6 +14,9 @@ export interface RokkaConfig {
     apiKey: string
 }
 
+/**
+ * Converts a rokka identifier from vendure to a rokka url, if not a rokka identifier, returns null
+ */
 export const RokkaIdentifierToUrl = (identifier: string): string | null => {
     if (identifier && identifier.startsWith('rokka:')) {
         const [, org, hash, preview] = identifier.split(':')

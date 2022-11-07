@@ -7,7 +7,7 @@
   "dependencies": {
     "@vendure/asset-server-plugin": "^1",
     "@vendure/core": "^1",
-    "rokka": "^3.10.0"
+    "rokka": "^3.11.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.41.0",
