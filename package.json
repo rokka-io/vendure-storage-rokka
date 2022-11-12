@@ -5,11 +5,11 @@
   "author": "rokka.io",
   "license": "MIT",
   "dependencies": {
-    "@vendure/asset-server-plugin": "^1",
-    "@vendure/core": "^1",
     "rokka": "^3.11.0"
   },
   "devDependencies": {
+    "@vendure/asset-server-plugin": "^1",
+    "@vendure/core": "^1",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
     "eslint": "^8.26.0",
