@@ -80,7 +80,7 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
      */
     async readFileToBuffer(identifier: string): Promise<Buffer> {
         const [, org, hash] = identifier.split(':')
-        const result = await this.rka.sourceimages.downloadAsBuffer(org, hash, true)
+        const result = await this.rka.sourceimages.downloadAsBuffer(org, hash)
 
         return Buffer.from(result.body)
     }
