@@ -19,12 +19,27 @@ export interface RokkaConfig {
  */
 export const RokkaIdentifierToUrl = (identifier: string): string | null => {
     if (identifier && identifier.startsWith('rokka:')) {
-        const [, org, hash, preview] = identifier.split(':')
+        const [, org, hash, preview, format] = identifier.split(':')
+
+        let outputFormat = 'jpg'
+
+        switch (format) {
+            case 'png':
+            case 'svg':
+                outputFormat = format
+        }
 
         if (preview === 'preview') {
-            return `https://${org}.rokka.io/dynamic/resize-width-1024-upscale-false/o-af-1/${hash}.jpg`
+            return `https://${org}.rokka.io/dynamic/resize-width-1024-upscale-false/o-af-1/${hash}.${outputFormat}`
         }
-        return `https://${org}.rokka.io/dynamic/o-af-1/${hash}.jpg`
+        // return initial format, if asked for source with these extensions
+        switch (format) {
+            case 'pdf':
+            case 'doc':
+            case 'xls':
+                outputFormat = format
+        }
+        return `https://${org}.rokka.io/dynamic/o-af-1/${hash}.${outputFormat}`
     }
     return null
 }
@@ -67,10 +82,15 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
     }
 
     private getIdentifier(result: SourceimagesListResponse, fileName: string) {
-        let identifier = `rokka:${this.rokkaConfig.organization}:${result.body.items[0].short_hash}`
+        const image = result.body.items[0]
+        let identifier = `rokka:${this.rokkaConfig.organization}:${image.short_hash}`
         if (fileName.startsWith('preview')) {
             identifier += ':preview'
+        } else {
+            identifier += ':'
         }
+
+        identifier += `:${image.format}`
 
         return identifier
     }
