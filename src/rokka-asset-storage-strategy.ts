@@ -95,9 +95,6 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
         return identifier
     }
 
-    /**
-     * TODO: This could be somehow cached, it seems to get called a lot...
-     */
     async readFileToBuffer(identifier: string): Promise<Buffer> {
         const [, org, hash] = identifier.split(':')
         const result = await this.rka.sourceimages.downloadAsBuffer(org, hash)
@@ -105,9 +102,6 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
         return Buffer.from(result.body)
     }
 
-    /**
-     * TODO: This could be somehow cached, it seems to get called a lot...
-     */
     async readFileToStream(identifier: string): Promise<Stream> {
         const [, org, hash] = identifier.split(':')
         const result = await this.rka.sourceimages.download(org, hash)
