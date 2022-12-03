@@ -24,6 +24,7 @@ plugins: [
         storageStrategyFactory: configureRokkaAssetStorage({
             organization: process.env.ROKKA_ORGANIZATION || '',
             apiKey: process.env.ROKKA_API_KEY || '',
+            // stackConfig: 'dynamic/resize-width-720/o-af-1' // if you want a different render stack config than the default
         }),
         previewStrategy: new RokkaAssetPreviewStrategy()
     //...

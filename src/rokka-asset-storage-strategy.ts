@@ -12,12 +12,16 @@ import { SourceimagesListResponse } from 'rokka/dist/apis/sourceimages'
 export interface RokkaConfig {
     organization: string
     apiKey: string
+    stackConfig?: string | undefined
 }
 
 /**
  * Converts a rokka identifier from vendure to a rokka url, if not a rokka identifier, returns null
  */
-export const RokkaIdentifierToUrl = (identifier: string): string | null => {
+export const RokkaIdentifierToUrl = (
+    identifier: string,
+    stackConfig = 'dynamic/resize-width-1024-upscale-false/o-af-1',
+): string | null => {
     if (identifier && identifier.startsWith('rokka:')) {
         const [, org, hash, preview, format] = identifier.split(':')
 
@@ -30,7 +34,7 @@ export const RokkaIdentifierToUrl = (identifier: string): string | null => {
         }
 
         if (preview === 'preview') {
-            return `https://${org}.rokka.io/dynamic/resize-width-1024-upscale-false/o-af-1/${hash}.${outputFormat}`
+            return `https://${org}.rokka.io/${stackConfig}/${hash}.${outputFormat}`
         }
         // return initial format, if asked for source with these extensions
         switch (format) {
@@ -47,8 +51,9 @@ export const RokkaIdentifierToUrl = (identifier: string): string | null => {
 export function configureRokkaAssetStorage(rokkaConfig: RokkaConfig) {
     return (options: AssetServerOptions) => {
         const prefixFn = getAssetUrlPrefixFn(options)
+        const stackConfig = rokkaConfig.stackConfig
         const toAbsoluteUrlFn = (request: Request, identifier: string): string => {
-            const url = RokkaIdentifierToUrl(identifier)
+            const url = RokkaIdentifierToUrl(identifier, stackConfig)
             if (url) {
                 return url
             }
@@ -61,7 +66,6 @@ export function configureRokkaAssetStorage(rokkaConfig: RokkaConfig) {
 
 export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
     private rka: RokkaApi
-
     constructor(
         private rokkaConfig: RokkaConfig,
         public readonly toAbsoluteUrl: (request: Request, identifier: string) => string,
