@@ -1,7 +1,7 @@
 {
   "name": "vendure-storage-rokka",
   "description": "A vendure.io storage adapter to store images on rokka.io",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "rokka.io",
   "license": "MIT",
   "dependencies": {
