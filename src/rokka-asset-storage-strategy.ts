@@ -13,6 +13,7 @@ export interface RokkaConfig {
     organization: string
     apiKey: string
     stackConfig?: string | undefined
+    addFaceDetection?: boolean
 }
 
 /**
@@ -76,13 +77,23 @@ export class RokkaAssetStorageStrategy implements AssetStorageStrategy {
     destroy?: (() => void | Promise<void>) | undefined
 
     async writeFileFromBuffer(fileName: string, data: Buffer): Promise<string> {
-        const result = await this.rka.sourceimages.create(this.rokkaConfig.organization, fileName, data)
+        const result = await this.rka.sourceimages.create(this.rokkaConfig.organization, fileName, data, this.getMeta())
         return this.getIdentifier(result, fileName)
     }
 
     async writeFileFromStream(fileName: string, data: Stream): Promise<string> {
-        const result = await this.rka.sourceimages.create(this.rokkaConfig.organization, fileName, data)
+        const result = await this.rka.sourceimages.create(this.rokkaConfig.organization, fileName, data, this.getMeta())
         return this.getIdentifier(result, fileName)
+    }
+
+    private getMeta() {
+        const meta: Record<string, object> = {
+            meta_user: { tool: 'vendure' },
+        }
+        if (this.rokkaConfig.addFaceDetection === true) {
+            meta['meta_dynamic'] = { detection_face: {} }
+        }
+        return meta
     }
 
     private getIdentifier(result: SourceimagesListResponse, fileName: string) {
