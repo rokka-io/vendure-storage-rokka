@@ -6,19 +6,9 @@ import { Asset, OrderLine } from '@vendure/core'
  * Adds a resize operation with width to a dynamic rokka url
  */
 export const resizeRokkaUrl = (rokkaUrl: string, width: number): string => {
-    const url = new URL(rokkaUrl)
-
-    const components = rokka().render.getUrlComponents(url)
-    if (!components) {
-        return rokkaUrl
-    }
-    return rokka().render.getUrl(
-        url.hostname.replace('.rokka.io', ''),
-        components.hash,
-        'jpg',
-        [{ name: 'resize', options: { width: width } }],
-        { filename: components.filename, stackoptions: { af: 1 } },
-    )
+    return rokka().render.getUrlFromUrl(rokkaUrl, [{ name: 'resize', options: { width: width } }], {
+        stackoptions: { af: 1 },
+    })
 }
 
 /**

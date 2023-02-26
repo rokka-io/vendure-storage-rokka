@@ -5,7 +5,7 @@
   "author": "rokka.io",
   "license": "MIT",
   "dependencies": {
-    "rokka": "^3.11.0"
+    "rokka": "^3.12.0"
   },
   "devDependencies": {
     "@vendure/asset-server-plugin": "^1",
